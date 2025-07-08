@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: #ffcce6;
+      background-image: url('background.png');
+      background-repeat: repeat;
+      background-size: 300px;
+      background-attachment: fixed;
+      overflow: hidden;
+      position: relative;
+    }
+
+    h1 {
+      position: absolute;
+      top: 30px;
+      width: 100%;
+      text-align: center;
+      font-size: 3rem;
+      color: #ff69b4;
+      text-shadow: 2px 2px #fff;
+      z-index: 2;
+    }
+
+    #thankButton {
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 30px;
+      background-color: #ffb6c1;
+      color: white;
+      cursor: pointer;
+      position: absolute;
+      z-index: 3;
+      box-shadow: 0 0 15px #ffaadd;
+      transition: transform 0.2s ease;
+    }
+
+    #thankButton:hover {
+      transform: scale(1.1);
+    }
+
+    .flower {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      background-image: url('https://cdn-icons-png.flaticon.com/512/833/833472.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      pointer-events: none;
+      animation: bloom 1s ease-out forwards;
+    }
+
+    @keyframes bloom {
+      0% { transform: scale(0.2) translateY(0); opacity: 1; }
+      100% { transform: scale(1.8) translateY(-60px); opacity: 0; }
+    }
+
+    .balloon {
+      position: absolute;
+      width: 40px;
+      height: 60px;
+      background-image: url('https://cdn-icons-png.flaticon.com/512/742/742751.png'); /* 🎈 Real balloon icon */
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: floatBalloon 10s linear;
+      opacity: 0.9;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    @keyframes floatBalloon {
+      from { transform: translateY(100vh); }
+      to { transform: translateY(-120px); }
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-image: url('https://cdn-icons-png.flaticon.com/512/7795/7795733.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: sparkleFade 1s ease-out forwards;
+    }
+
+    @keyframes sparkleFade {
+      0% { opacity: 1; transform: scale(0.5); }
+      100% { opacity: 0; transform: scale(1.5) translateY(-30px); }
+    }
+
+    #personalMessage {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      display: none;
+      z-index: 100;
+      text-align: center;
+      font-size: 1.2rem;
+      color: #ff69b4;
+      max-width: 90%;
+    }
+
+    iframe {
+      position: absolute;
+      left: -9999px;
+      width: 0;
+      height: 0;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎉 Happyy Birthday Dhuviee !!! 🎂</h1>
+  <button id="thankButton">Thank You!</button>
+  <div id="personalMessage">
+    💌 <strong>A very happy bdayy Princess!<br>
+    Hope this year brings you everything you’ve been wishing for.<br>
+    I'm so grateful to have you in my life.<br>
+    Thanks Uncle and Aunty for giving you birth. 🫶<br>
+    Keep smiling, lovee you, enjoyy the dayyy! 💖</strong>
+  </div>
+
+  <iframe id="bgMusic"
+    src="https://www.youtube.com/embed/lVpZaByCWUE?autoplay=1&loop=1&playlist=lVpZaByCWUE"
+    allow="autoplay"
+    allowfullscreen>
+  </iframe>
+
+  <audio id="clickSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_7bdf0b7b3a.mp3"></audio>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    const button = document.getElementById('thankButton');
+    const messageBox = document.getElementById('personalMessage');
+    const clickSound = document.getElementById('clickSound');
+    let thankClickCount = 0;
+
+    function createFlower(x, y) {
+      for (let i = 0; i < 6; i++) {
+        const flower = document.createElement('div');
+        flower.classList.add('flower');
+        flower.style.left = `${x + Math.random() * 60 - 30}px`;
+        flower.style.top = `${y + Math.random() * 60 - 30}px`;
+        document.body.appendChild(flower);
+        setTimeout(() => flower.remove(), 1000);
+      }
+    }
+
+    function createSparkles(x, y) {
+      for (let i = 0; i < 5; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.classList.add('sparkle');
+        sparkle.style.left = `${x + Math.random() * 40 - 20}px`;
+        sparkle.style.top = `${y + Math.random() * 40 - 20}px`;
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 1000);
+      }
+    }
+
+    function moveButtonRandomly() {
+      const maxX = window.innerWidth - button.offsetWidth;
+      const maxY = window.innerHeight - button.offsetHeight;
+      const newX = Math.random() * maxX;
+      const newY = Math.random() * maxY;
+      button.style.left = `${newX}px`;
+      button.style.top = `${newY}px`;
+    }
+
+    button.addEventListener('click', () => {
+      thankClickCount++;
+
+      const rect = button.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      clickSound.play();
+      createFlower(centerX, centerY);
+      createSparkles(centerX, centerY);
+      moveButtonRandomly();
+
+      confetti({
+        particleCount: 60,
+        spread: 80,
+        origin: {
+          x: centerX / window.innerWidth,
+          y: centerY / window.innerHeight
+        }
+      });
+
+      if (thankClickCount === 15) {
+        messageBox.style.display = 'block';
+      }
+    });
+
+    function createBalloon() {
+      const balloon = document.createElement('div');
+      balloon.classList.add('balloon');
+      balloon.style.left = `${Math.random() * window.innerWidth}px`;
+      balloon.style.animationDuration = `${6 + Math.random() * 6}s`;
+
+      balloon.addEventListener('click', () => {
+        createSparkles(
+          balloon.offsetLeft + balloon.offsetWidth / 2,
+          balloon.offsetTop + balloon.offsetHeight / 2
+        );
+        balloon.remove();
+      });
+
+      document.body.appendChild(balloon);
+      setTimeout(() => balloon.remove(), 12000);
+    }
+
+    setInterval(createBalloon, 1000);
+
+    document.body.addEventListener('click', () => {
+      const iframe = document.getElementById('bgMusic');
+      iframe.src += '';
+    }, { once: true });
+
+    window.onload = moveButtonRandomly;
+  </script>
+</body>
+</html>
